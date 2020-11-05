@@ -1,5 +1,6 @@
 var utils = (() => {
     const parseFecha = (stringFecha, withHour = false) => {
+        if (typeof stringFecha === "undefined") return "00/00/0000";
         const fecha = new Date(stringFecha);
         let newFormat = `${stringFecha.slice(8,10)} de ${_arrayMonths[fecha.getMonth()]} del ${fecha.getFullYear()}`;
         if (withHour) {
