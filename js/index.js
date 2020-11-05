@@ -121,5 +121,19 @@ var app = new Vue({
         goDetails: function() {
             this.showDetails = true;
         }
+    },
+    computed: {
+        ariculoRefactor() {
+            if (Object.values(this.articulo).length > 0) {
+                const existenciasRefactor = this.articulo.existencias.map((sucursal) => {
+                    if (typeof sucursal.compras !== "object") {
+                        sucursal.compras = {}
+                    };
+                    return sucursal;
+                });
+                this.articulo.existencias = existenciasRefactor;
+            }
+            return this.articulo;
+        }
     }
 });

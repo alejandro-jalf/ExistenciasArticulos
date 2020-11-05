@@ -105,7 +105,7 @@
                 <label for="#"><span class="font-weight-bold">Costo Existencia Actual:</span> {{utils.aplyFormatNumeric(utils.roundTo(articulo.CostoExistActual, 3))}}</label>
             </div>
 
-            <div v-for="sucursal in articulo.existencias" class="card">
+            <div v-for="sucursal in ariculoRefactor.existencias" class="card">
                 <div class="card-header bg-info" id="headingOne">
                     <h2 class="mb-0">
                         <button class="btn btn-link btn-block text-right dropdown-toggle text-light" type="button" data-toggle="collapse" v-bind:data-target="'#'+namesSucursales[sucursal.sucursal]" aria-expanded="true" aria-controls="collapseOne">
