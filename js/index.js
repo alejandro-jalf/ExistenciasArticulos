@@ -20,6 +20,7 @@ var app = new Vue({
     },
     mounted: function(){
         this.movil = this.isDiplayMovil();
+        this.getLocalStorage();
     },
     methods: {
         showAlertDialog: function(message) {
@@ -34,6 +35,28 @@ var app = new Vue({
         count: function(anyObject) {
             const length = (Object.keys(anyObject)).length;
             return length;
+        },
+        setArticulosLocalStorage: function(articulos, NumSearchProducts, finded) {
+            const stringArticulos = JSON.stringify(articulos);
+            localStorage.setItem("articulosexistencias", stringArticulos);
+            localStorage.setItem("nsearchexistencias", NumSearchProducts);
+            localStorage.setItem("findedchexistencias", finded);
+        },
+        setDetailsLocalStorage: function(articulo, NumSearch) {
+            const stringArticulos = JSON.stringify(articulo);
+            localStorage.setItem("articuloexistencias", stringArticulos);
+            localStorage.setItem("searchexistencias", NumSearch);
+        },
+        getLocalStorage: function() {
+            const stringArticulos = localStorage.getItem("articulosexistencias");
+            const stringArticulo = localStorage.getItem("articuloexistencias");
+
+            this.articulos = JSON.parse(stringArticulos);
+            this.NumSearchProducts = parseInt(localStorage.getItem("nsearchexistencias"));
+            this.finded = parseInt(localStorage.getItem("findedchexistencias"));
+
+            this.articulo = JSON.parse(stringArticulo);
+            this.NumSearch = parseInt(localStorage.getItem("searchexistencias"));
         },
         getArticulos: function() {
             if (this.textSearch.trim() === "") {
@@ -51,12 +74,14 @@ var app = new Vue({
                     instancia.finded = 0;
                     instancia.stopLoading();
                     instancia.showAlertDialog("No hay conexion con la base de datos");
+                    instancia.setArticulosLocalStorage(instancia.articulos, instancia.NumSearchProducts, instancia.finded);
                     return;
                 }
                 instancia.articulos = response.data.data;
                 instancia.stopLoading();
                 instancia.NumSearchProducts += 1;
                 instancia.finded = response.data.count;
+                instancia.setArticulosLocalStorage(instancia.articulos, instancia.NumSearchProducts, instancia.finded);
             })
             .catch(function (error) {
                 instancia.articulos = [];
@@ -64,6 +89,7 @@ var app = new Vue({
                 instancia.NumSearchProducts += 1;
                 instancia.finded = 0;
                 instancia.showAlertDialog("Error inesperado: No hay conexion con el servidor");
+                instancia.setArticulosLocalStorage(instancia.articulos, instancia.NumSearchProducts, instancia.finded);
                 console.log('Error: ' + error);
             }); 
         },
@@ -77,12 +103,14 @@ var app = new Vue({
                     instancia.showDetails = true;
                     instancia.stopLoading();
                     instancia.showAlertDialog("No hay conexion con la base de datos");
+                    instancia.setDetailsLocalStorage([], instancia.NumSearch);
                     return;
                 }
                 instancia.articulo = response.data.data;
                 instancia.stopLoading();
                 instancia.showDetails = true;
                 instancia.NumSearch += 1;
+                instancia.setDetailsLocalStorage(instancia.articulo, instancia.NumSearch);
             })
             .catch(function (error) {
                 instancia.articulo = {
@@ -94,6 +122,7 @@ var app = new Vue({
                     CostoExistActual: null,
                     existencias: []
                 };
+                instancia.setDetailsLocalStorage(instancia.articulo, instancia.NumSearch);
                 instancia.stopLoading();
                 instancia.showDetails = true;
                 instancia.showAlertDialog("Error inesperado: No hay conexion con el servidor");
