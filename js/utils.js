@@ -12,7 +12,8 @@ var utils = (() => {
     const _arrayMonths = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
     const aplyFormatNumeric = (numberString) => {
-        if (numberString === null || typeof numberString === "undefined" || numberString.trim().length <= 2) return;
+        if (numberString === null || typeof numberString === "undefined") return;
+        if (numberString.trim().length <= 2) return numberString;
         const arrayDivision = numberString.split(".");
         let numberFormated = "00,000.000";
         const lengthPartInt = arrayDivision[0].length;
@@ -33,7 +34,6 @@ var utils = (() => {
         if (arrayDivision.length === 2) {
             numberFormated += `.${arrayDivision[1]}`;
         }
-        console.log(numberString, numberFormated);
         return numberFormated;
     }
 
